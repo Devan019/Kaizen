@@ -1,0 +1,1 @@
+install mpv - https://github.com/shinchiro/mpv-winbuild-cmake/releases

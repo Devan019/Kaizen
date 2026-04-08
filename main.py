@@ -2,7 +2,7 @@ from helpers.config import load_config
 from ui import home, setup
 import customtkinter as ctk
 import speech_recognition as sr
-from helpers.agent import run_agent
+from helpers.agent import Agent
 from helpers.speak import speak_async
 import threading
 
@@ -10,6 +10,9 @@ CONFIG_FILE = "config.json"
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
+
+#agent
+agent = Agent()
 
 
 # speech object and tool
@@ -35,7 +38,7 @@ def start_listening(config):
                 print("You said:", text)
 
                 if wake_name and wake_name.lower() in text.lower():
-                    llm_res = run_agent(text)
+                    llm_res = agent.run_agent(text)
                     speak_async(llm_res, voice)
 
             except sr.UnknownValueError:

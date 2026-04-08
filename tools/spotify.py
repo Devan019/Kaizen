@@ -3,102 +3,109 @@ import base64
 from const.keys import spotify_client_id, spotify_client_secret
 import webbrowser
 
-#get access token
-def get_access_token():
 
-    auth_str = f"{spotify_client_id}:{spotify_client_secret}"
+class Spotify:
 
-    #base 64 auth
-    b64_auth = base64.b64encode(auth_str.encode()).decode()
-
-    #api of token
-    url = "https://accounts.spotify.com/api/token"
+    def __init__(self):
+        self.__token_url = "https://accounts.spotify.com/api/token"
+        self.__search_url = "https://api.spotify.com/v1/search"
 
 
-    #header 
-    headers = {
-        "Authorization": f"Basic {b64_auth}",
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
+    # get access token
+    def __get_access_token(self):
 
-    data = {
-        "grant_type": "client_credentials"
-    }
+        auth_str = f"{spotify_client_id}:{spotify_client_secret}"
 
-    #call post req
-    res = requests.post(url, headers=headers, data=data)
+        # base 64 auth
+        b64_auth = base64.b64encode(auth_str.encode()).decode()
 
-    #return token
-    return res.json()["access_token"]
+        # api of token
+        url = self.__token_url
 
-def helper_song(song_name):
-    #get token
-    access_token = get_access_token()
+        # header
+        headers = {
+            "Authorization": f"Basic {b64_auth}",
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
-    #search
-    search_url = "https://api.spotify.com/v1/search"
-    headers = {"Authorization": f"Bearer {access_token}"}
+        data = {
+            "grant_type": "client_credentials"
+        }
 
-    #params
-    params = {
-        "q": song_name,
-        "type": "track",
-        "limit": 1
-    }
+        # call post req
+        res = requests.post(url, headers=headers, data=data)
 
-    #call api, get req
-    res = requests.get(search_url, headers=headers, params=params)
-    data = res.json()
+        # return token
+        return res.json()["access_token"]
 
-    #get track url
-    track_uri  = data["tracks"]["items"][0]["external_urls"]["spotify"]
+    def __helper_song(self,song_name):
+        # get token
+        access_token = self.__get_access_token()
+
+        # search
+        search_url = self.__search_url
+        headers = {"Authorization": f"Bearer {access_token}"}
+
+        # params
+        params = {
+            "q": song_name,
+            "type": "track",
+            "limit": 1
+        }
+
+        # call api, get req
+        res = requests.get(search_url, headers=headers, params=params)
+        data = res.json()
+
+        # get track url
+        track_uri = data["tracks"]["items"][0]["external_urls"]["spotify"]
+
+        return track_uri
     
-    return track_uri
 
 
-#play song
-def play_spotify_song(song_name):
 
-    #get track url
-    track_uri  = helper_song(song_name)
+    # play song
+    def play_spotify_song(self,song_name):
 
-    #play song
-    webbrowser.open(track_uri)
-  
-    return f"Playing {song_name}"
+        # get track url
+        track_uri = self.__helper_song(song_name)
 
-#get track link
-def get_spotify_song_link(song_name):
-    return helper_song(song_name)
+        # play song
+        webbrowser.open(track_uri)
 
+        return f"Playing {song_name}"
 
-#play playlist
-def play_spotify_playlist(playlist_name:str):
-    #get token
-    access_token = get_access_token()
+    # get track link
+    def get_spotify_song_link(self,song_name):
+        return self.__helper_song(song_name)
 
-    #search
-    search_url = "https://api.spotify.com/v1/search"
-    headers = {"Authorization": f"Bearer {access_token}"}
+    # play playlist
+    def play_spotify_playlist(self,playlist_name: str):
+        # get token
+        access_token = self.__get_access_token()
 
-    #params
-    params = {
-        "q": playlist_name,
-        "type": "playlist",
-        "limit": 1
-    }
+        # search
+        search_url = self.__search_url
+        headers = {"Authorization": f"Bearer {access_token}"}
 
-    #call api, get playlist
-    res = requests.get(search_url, headers=headers, params=params)
-    data = res.json()
+        # params
+        params = {
+            "q": playlist_name,
+            "type": "playlist",
+            "limit": 1
+        }
 
-    #get id
-    url = data["playlists"]["items"][0]["external_urls"]["spotify"]
+        # call api, get playlist
+        res = requests.get(search_url, headers=headers, params=params)
+        data = res.json()
 
-    #open playlist
-    webbrowser.open(url)
+        # get id
+        url = data["playlists"]["items"][0]["external_urls"]["spotify"]
 
-    return f"playing {playlist_name}"
+        # open playlist
+        webbrowser.open(url)
 
+        return f"playing {playlist_name}"
 
-#TODO :- more on artist, espisode, audiobook, ....
+        # TODO :- more on artist, espisode, audiobook, ....

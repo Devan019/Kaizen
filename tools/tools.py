@@ -1,18 +1,25 @@
-from .get_weather import getWeather
-from .open_app import open_app
-from .spotify import play_spotify_song, play_spotify_playlist, get_spotify_song_link
-from .yt import play_youtube_video
-from .whatsapp import send_whastapp_message
+from .get_weather import Weather
+from .open_app import LocalApp
+from .spotify import Spotify
+from .yt import Youtube
+from .whatsapp import WhatsApp
+
+#objects
+weather = Weather()
+localapp = LocalApp()
+spotify = Spotify()
+yt = Youtube()
+wh = WhatsApp()
 
 # tool map
 TOOL_MAP = {
-    "current_weather": getWeather,
-    "open_app": open_app,
-    "play_spotify_song" : play_spotify_song,
-    "play_spotify_playlist" : play_spotify_playlist,
-    "get_spotify_song_link" : get_spotify_song_link,
-    "play_youtube_video" : play_youtube_video,
-    "send_whastapp_message" : send_whastapp_message
+    "current_weather": weather.getWeather,
+    "open_app": localapp.open_app,
+    "play_spotify_song" : spotify.play_spotify_song,
+    "play_spotify_playlist" : spotify.play_spotify_playlist,
+    "get_spotify_song_link" : spotify.get_spotify_song_link,
+    "play_youtube_video" : yt.play_youtube_video,
+    "send_whastapp_message" : wh.send_whastapp_message
 }
 
 

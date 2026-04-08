@@ -2,7 +2,7 @@ from helpers.config import load_config
 from ui import home, setup
 import customtkinter as ctk
 import speech_recognition as sr
-from helpers.bot import get_groq_response
+from helpers.agent import run_agent
 from helpers.speak import speak_async
 import threading
 
@@ -15,14 +15,13 @@ ctk.set_default_color_theme("green")
 # speech object and tool
 r = sr.Recognizer()
 # set thresold 1 sec
-r.pause_threshold = 1
+r.pause_threshold = 2
 
 # speech fun
 
-
 def start_listening(config):
     with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source, duration=1)
+        r.adjust_for_ambient_noise(source, duration=2)
 
         while True:
             try:
@@ -36,7 +35,7 @@ def start_listening(config):
                 print("You said:", text)
 
                 if wake_name and wake_name.lower() in text.lower():
-                    llm_res = get_groq_response(text)
+                    llm_res = run_agent(text)
                     speak_async(llm_res, voice)
 
             except sr.UnknownValueError:

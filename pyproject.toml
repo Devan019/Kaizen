@@ -15,6 +15,8 @@ dependencies = [
     "pillow>=12.2.0",
     "pyaudio>=0.2.14",
     "pygame>=2.6.1",
+    "pywhatkit>=5.4",
+    "requests>=2.33.1",
     "sounddevice>=0.5.5",
     "speechrecognition>=3.16.0",
 ]

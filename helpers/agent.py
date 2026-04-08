@@ -6,8 +6,6 @@ import json
 client = GroqClient().client
 
 
-
-
 #call llm
 def get_groq_response(messages: list):
   return client.chat.completions.create(
@@ -25,32 +23,43 @@ def run_agent(user_input: str):
         {"role": "user", "content": user_input}
     ]
 
-    # First LLM call
-    response = get_groq_response(messages)
-    msg = response.choices[0].message
+    MAX_TRIES = 5
 
-    # Check tool call
-    if msg.tool_calls:
-        tool_call = msg.tool_calls[0]
+    for _ in range(MAX_TRIES):
 
-        tool_name = tool_call.function.name
-        args = json.loads(tool_call.function.arguments)
+        # Get LLM response
+        response = get_groq_response(messages)
+        msg = response.choices[0].message
 
-        # Execute tool
-        tool_fn = TOOL_MAP.get(tool_name)
-        result = tool_fn(**args)
+        # If no tool, final answer
+        if not msg.tool_calls:
+            return msg.content
 
-        # Second LLM call
+        # Add assistant message
         messages.append(msg)
-        messages.append({
-            "role": "tool",
-            "tool_call_id": tool_call.id,
-            "content": json.dumps(result)
-        })
 
-        final_response = get_groq_response(messages)
-        return final_response.choices[0].message.content
+        # Execute all tool calls
+        for tool in msg.tool_calls:
+
+            tool_name = tool.function.name
+            args = json.loads(tool.function.arguments)
+
+            tool_fn = TOOL_MAP.get(tool_name)
+
+            if not tool_fn:
+                result = {"error": f"Tool {tool_name} not found"}
+            else:
+                result = tool_fn(**args)
+
+            # Add tool result
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tool.id,
+                "content": json.dumps(result)
+            })
 
 
-    # if not tool direct response
-    return msg.content
+    return "Max iterations reached"
+
+
+print(run_agent("can u send a song link of  to my dad"))

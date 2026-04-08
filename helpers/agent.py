@@ -60,6 +60,3 @@ def run_agent(user_input: str):
 
 
     return "Max iterations reached"
-
-
-print(run_agent("can u send a song link of  to my dad"))

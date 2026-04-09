@@ -29,11 +29,14 @@ need to install
 - 💬 WhatsApp Messaging  
   - Send messages programmatically  
 
+- 📅 Google Meet (join meetings, schedule)
 ---
 
 ## 🔥 Upcoming Tools (Roadmap)
 
 ---
+
+- update readme with "How use tool "
 
 ## 🥇 1. Google Workspace Tool (TOP PRIORITY)
 
@@ -44,7 +47,6 @@ Integrate with Google ecosystem:
 - 📁 Google Drive (upload, search, manage files)
 - 🎓 Google Classroom (assignments, tasks)
 - 📧 Google Mail (send, read emails)
-- 📅 Google Meet (join meetings, schedule)
 
 ### Example Commands:
 - “Create a Google Doc for meeting notes”

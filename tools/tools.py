@@ -3,6 +3,7 @@ from .open_app import LocalApp
 from .spotify import Spotify
 from .yt import Youtube
 from .whatsapp import WhatsApp
+from .google_tool import GoogleTool
 
 #objects
 weather = Weather()
@@ -10,6 +11,7 @@ localapp = LocalApp()
 spotify = Spotify()
 yt = Youtube()
 wh = WhatsApp()
+gt = GoogleTool()
 
 # tool map
 TOOL_MAP = {
@@ -22,7 +24,8 @@ TOOL_MAP = {
     "get_youtube_video_link" : yt.get_youtube_video_link,
     "download_youtube_video": yt.download_youtube_video,
     "download_youtube_audio_only": yt.download_youtube_audio_only,
-    "send_whastapp_message" : wh.send_whastapp_message
+    "send_whastapp_message" : wh.send_whastapp_message,
+    "create_google_meet_and_get_link" : gt.googleMeet.create_google_meet_and_get_link
 }
 
 
@@ -182,14 +185,30 @@ TOOLS_SCHEMA = [
         "type": "function",
         "function": {
             "name": "send_whastapp_message",
-            "description": "send_whastapp_message",
+            "description": "send whastapp message",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "name": {"name": "string"},
-                    "message" : {"message": "string"}
+                    "name": {"type": "string"},
+                    "message" : {"type": "string"}
                 },
                 "required": ["name", "message"]
+            }
+        }
+    },
+
+    #create a google meet and get link
+    {
+        "type": "function",
+        "function": {
+            "name": "create_google_meet_and_get_link",
+            "description": "create a google_meet and get link of that google meet",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "summary": {"type": "string"},
+                    "start_time" : {"type": "string"}
+                }
             }
         }
     },

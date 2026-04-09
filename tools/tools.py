@@ -19,6 +19,9 @@ TOOL_MAP = {
     "play_spotify_playlist" : spotify.play_spotify_playlist,
     "get_spotify_song_link" : spotify.get_spotify_song_link,
     "play_youtube_video" : yt.play_youtube_video,
+    "get_youtube_video_link" : yt.get_youtube_video_link,
+    "download_youtube_video": yt.download_youtube_video,
+    "download_youtube_audio_only": yt.download_youtube_audio_only,
     "send_whastapp_message" : wh.send_whastapp_message
 }
 
@@ -114,6 +117,56 @@ TOOLS_SCHEMA = [
         "function": {
             "name": "play_youtube_video",
             "description": "play a youtube video",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "search": {"type": "string"}
+                },
+                "required": ["search"]
+            }
+        }
+    },
+
+    #get yt video link
+    {
+        "type": "function",
+        "function": {
+            "name": "get_youtube_video_link",
+            "description": "get a youtube video link",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "search": {"type": "string"}
+                },
+                "required": ["search"]
+            }
+        }
+    },
+
+    #download a yt video
+    {
+        "type": "function",
+        "function": {
+            "name": "download_youtube_video",
+            "description": "download a youtube video",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "search": {"type": "string"},
+                    "resolution" : {"type" : "string"}
+                },
+                "required": ["search", "resolution"]
+            }
+        }
+    },
+
+
+    #download a yt audio only
+    {
+        "type": "function",
+        "function": {
+            "name": "download_youtube_audio_only",
+            "description": "download a youtube video's audio only",
             "parameters": {
                 "type": "object",
                 "properties": {

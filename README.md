@@ -44,6 +44,7 @@ Integrate with Google ecosystem:
 - 📁 Google Drive (upload, search, manage files)
 - 🎓 Google Classroom (assignments, tasks)
 - 📧 Google Mail (send, read emails)
+- 📅 Google Meet (join meetings, schedule)
 
 ### Example Commands:
 - “Create a Google Doc for meeting notes”

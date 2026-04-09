@@ -12,3 +12,5 @@ wheels/
 .env
 
 PyWhatkit_DB.txt
+
+yt_videos

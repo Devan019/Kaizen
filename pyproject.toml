@@ -19,4 +19,5 @@ dependencies = [
     "requests>=2.33.1",
     "sounddevice>=0.5.5",
     "speechrecognition>=3.16.0",
+    "yt-dlp>=2026.3.17",
 ]

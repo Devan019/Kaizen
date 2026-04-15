@@ -5,6 +5,7 @@ import speech_recognition as sr
 from helpers.agent import Agent
 from helpers.speak import speak_async
 import threading
+import time
 
 CONFIG_FILE = "config.json"
 
@@ -17,43 +18,51 @@ agent = Agent()
 
 # speech object and tool
 r = sr.Recognizer()
-# set thresold 1 sec
-r.pause_threshold = 2
 
 # speech fun
 
 def start_listening(config):
     with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source, duration=2)
+        r.adjust_for_ambient_noise(source, duration=1)
 
         while True:
             try:
                 wake_name = (config.get("wake_name") or "").strip()
                 voice = config.get("voice", "en-US-GuyNeural")
 
-                print("Listening...")
-                audio = r.listen(source)
+                print("🎤 Listening...")
 
+                # istening
+                t_listen_start = time.perf_counter()
+                audio = r.listen(source, timeout=2, phrase_time_limit=100)
+                t_listen_end = time.perf_counter()
+
+                #  STT
+                t_stt_start = time.perf_counter()
                 text: str = r.recognize_google(audio)
-                print("You said:", text)
+                t_stt_end = time.perf_counter()
 
                 if wake_name and wake_name.lower() in text.lower():
+
+                    # Agent
+                    t_agent_start = time.perf_counter()
                     llm_res = agent.run_agent(text)
+                    t_agent_end = time.perf_counter()
+
+                    # TTS
+                    t_tts_start = time.perf_counter()
                     speak_async(llm_res, voice)
+                    t_tts_end = time.perf_counter()
 
-            except sr.UnknownValueError:
-                print("Didn't catch that...")
-                continue
-
-            except sr.RequestError:
-                print("API unavailable")
-                continue
+                    print("\n⏱️ Timing Breakdown:")
+                    print(f"Listening time: {t_listen_end - t_listen_start:.2f}s")
+                    print(f"STT time: {t_stt_end - t_stt_start:.2f}s")
+                    print(f"Agent time: {t_agent_end - t_agent_start:.2f}s")
+                    print(f"TTS trigger time: {t_tts_end - t_tts_start:.2f}s")
 
             except Exception as e:
-                print("Error:", e)
+                print("❌ Error:", e)
                 continue
-
-
 # main
 if __name__ == "__main__":
     app = ctk.CTk()

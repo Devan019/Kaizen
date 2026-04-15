@@ -25,7 +25,8 @@ TOOL_MAP = {
     "download_youtube_video": yt.download_youtube_video,
     "download_youtube_audio_only": yt.download_youtube_audio_only,
     "send_whastapp_message" : wh.send_whastapp_message,
-    "create_google_meet_and_get_link" : gt.googleMeet.create_google_meet_and_get_link
+    "create_google_meet_and_get_link" : gt.googleMeet.create_google_meet_and_get_link,
+    "open_meet_browser" : gt.googleMeet.open_meet_browser
 }
 
 
@@ -209,6 +210,22 @@ TOOLS_SCHEMA = [
                     "summary": {"type": "string"},
                     "start_time" : {"type": "string"}
                 }
+            }
+        }
+    },
+
+    #open a google meet
+    {
+        "type": "function",
+        "function": {
+            "name": "open_meet_browser",
+            "description": "open a google meet at browser",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string"}
+                },
+                "required" : ["url"]
             }
         }
     },

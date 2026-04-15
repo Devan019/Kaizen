@@ -1,3 +1,4 @@
+import threading
 import edge_tts
 import subprocess
 import asyncio
@@ -21,7 +22,10 @@ async def stream_audio(text, voice):
 
 
 def speak_async(text, voice):
-    asyncio.run(stream_audio(text, voice))
+    def runner():
+        asyncio.run(stream_audio(text, voice))
+    
+    threading.Thread(target=runner, daemon=True).start()
 
 
 

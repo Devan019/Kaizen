@@ -2,7 +2,7 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from datetime import datetime, timedelta
 from helpers.update_cred import get_valid_creds
-
+import webbrowser
 
 class GoogleMeet:
     
@@ -57,3 +57,12 @@ class GoogleMeet:
                          .get("uri")
 
         return meet_link
+    
+    #open a meet
+    def open_meet_browser(self, url:str):
+        try:
+            webbrowser.open(url)
+            return f"open that meet sucessfully"
+        except Exception as e:
+            return e
+    

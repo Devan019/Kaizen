@@ -4,29 +4,38 @@ from .spotify import Spotify
 from .yt import Youtube
 from .whatsapp import WhatsApp
 from .google_tool import GoogleTool
+from .todo import TodoTool
 
-#objects
+# objects
 weather = Weather()
 localapp = LocalApp()
 spotify = Spotify()
 yt = Youtube()
 wh = WhatsApp()
 gt = GoogleTool()
+todo = TodoTool()
 
 # tool map
 TOOL_MAP = {
     "current_weather": weather.getWeather,
     "open_app": localapp.open_app,
-    "play_spotify_song" : spotify.play_spotify_song,
-    "play_spotify_playlist" : spotify.play_spotify_playlist,
-    "get_spotify_song_link" : spotify.get_spotify_song_link,
-    "play_youtube_video" : yt.play_youtube_video,
-    "get_youtube_video_link" : yt.get_youtube_video_link,
+    "play_spotify_song": spotify.play_spotify_song,
+    "play_spotify_playlist": spotify.play_spotify_playlist,
+    "get_spotify_song_link": spotify.get_spotify_song_link,
+    "play_youtube_video": yt.play_youtube_video,
+    "get_youtube_video_link": yt.get_youtube_video_link,
     "download_youtube_video": yt.download_youtube_video,
     "download_youtube_audio_only": yt.download_youtube_audio_only,
-    "send_whastapp_message" : wh.send_whastapp_message,
-    "create_google_meet_and_get_link" : gt.googleMeet.create_google_meet_and_get_link,
-    "open_meet_browser" : gt.googleMeet.open_meet_browser
+    "send_whastapp_message": wh.send_whastapp_message,
+    "create_google_meet_and_get_link": gt.googleMeet.create_google_meet_and_get_link,
+    "open_meet_browser": gt.googleMeet.open_meet_browser,
+
+    "open_todo_ui": todo.open_ui,
+    "close_todo_ui": todo.close_ui,
+    "add_todo": todo.add_todo,
+    "remove_todo": todo.remove_todo,
+    "toggle_todo": todo.toggle_todo,
+    "get_todos": todo.get_todos
 }
 
 
@@ -82,7 +91,7 @@ TOOLS_SCHEMA = [
         }
     },
 
-    #play a spotify playlist - tool
+    # play a spotify playlist - tool
     {
         "type": "function",
         "function": {
@@ -98,7 +107,7 @@ TOOLS_SCHEMA = [
         }
     },
 
-    #get spotify song link
+    # get spotify song link
     {
         "type": "function",
         "function": {
@@ -115,7 +124,7 @@ TOOLS_SCHEMA = [
     },
 
 
-    #play yt video
+    # play yt video
     {
         "type": "function",
         "function": {
@@ -131,7 +140,7 @@ TOOLS_SCHEMA = [
         }
     },
 
-    #get yt video link
+    # get yt video link
     {
         "type": "function",
         "function": {
@@ -147,7 +156,7 @@ TOOLS_SCHEMA = [
         }
     },
 
-    #download a yt video
+    # download a yt video
     {
         "type": "function",
         "function": {
@@ -157,7 +166,7 @@ TOOLS_SCHEMA = [
                 "type": "object",
                 "properties": {
                     "search": {"type": "string"},
-                    "resolution" : {"type" : "string"}
+                    "resolution": {"type": "string"}
                 },
                 "required": ["search", "resolution"]
             }
@@ -165,7 +174,7 @@ TOOLS_SCHEMA = [
     },
 
 
-    #download a yt audio only
+    # download a yt audio only
     {
         "type": "function",
         "function": {
@@ -181,7 +190,7 @@ TOOLS_SCHEMA = [
         }
     },
 
-    #send a message on whatsapp
+    # send a message on whatsapp
     {
         "type": "function",
         "function": {
@@ -191,14 +200,14 @@ TOOLS_SCHEMA = [
                 "type": "object",
                 "properties": {
                     "name": {"type": "string"},
-                    "message" : {"type": "string"}
+                    "message": {"type": "string"}
                 },
                 "required": ["name", "message"]
             }
         }
     },
 
-    #create a google meet and get link
+    # create a google meet and get link
     {
         "type": "function",
         "function": {
@@ -208,13 +217,13 @@ TOOLS_SCHEMA = [
                 "type": "object",
                 "properties": {
                     "summary": {"type": "string"},
-                    "start_time" : {"type": "string"}
+                    "start_time": {"type": "string"}
                 }
             }
         }
     },
 
-    #open a google meet
+    # open a google meet
     {
         "type": "function",
         "function": {
@@ -225,7 +234,96 @@ TOOLS_SCHEMA = [
                 "properties": {
                     "url": {"type": "string"}
                 },
-                "required" : ["url"]
+                "required": ["url"]
+            }
+        }
+    },
+
+    # open todo UI
+    {
+        "type": "function",
+        "function": {
+            "name": "open_todo_ui",
+            "description": "open todo UI window",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+
+    # close todo UI
+    {
+        "type": "function",
+        "function": {
+            "name": "close_todo_ui",
+            "description": "close todo UI window",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+
+    # add todo task
+    {
+        "type": "function",
+        "function": {
+            "name": "add_todo",
+            "description": "add a todo task with date, time and text",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "todo_date": {"type": "string"},
+                    "todo_time": {"type": "string"},
+                    "todo_text": {"type": "string"}
+                },
+                "required": ["todo_date", "todo_time", "todo_text"]
+            }
+        }
+    },
+
+    # remove todo task by index
+    {
+        "type": "function",
+        "function": {
+            "name": "remove_todo",
+            "description": "remove a todo task by index",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "index": {"type": "integer"}
+                },
+                "required": ["index"]
+            }
+        }
+    },
+
+    # toggle todo task status by index
+    {
+        "type": "function",
+        "function": {
+            "name": "toggle_todo",
+            "description": "toggle done or pending state of a todo by index",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "index": {"type": "integer"}
+                },
+                "required": ["index"]
+            }
+        }
+    },
+
+    # get all todos
+    {
+        "type": "function",
+        "function": {
+            "name": "get_todos",
+            "description": "get all todo tasks",
+            "parameters": {
+                "type": "object",
+                "properties": {}
             }
         }
     },

@@ -4,13 +4,14 @@ from tools.tools import TOOLS_SCHEMA, TOOL_MAP
 import json
 
 client = GroqClient().client
+TODO_FILE = "todo.json"
 
 
 class Agent:
 
     def __init__(self):
-        self.__model = "openai/gpt-oss-20b"
-        self.__max_tries = 5
+        self.__model = "openai/gpt-oss-120b"
+        self.__max_tries = 50
 
     # call llm
     def __get_groq_response(self, messages: list):
@@ -62,3 +63,7 @@ class Agent:
                 })
 
         return "Max iterations reached"
+
+
+agent = Agent()
+print(agent.run_agent("bro can u add todos, tomorrow 10am wake up and tomorrow 11am take lanch"))

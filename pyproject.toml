@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "customtkinter>=5.2.2",
+    "deepface>=0.0.99",
     "dotenv>=0.9.9",
     "edge-tts>=7.2.8",
     "faster-whisper>=1.2.1",
@@ -14,6 +15,7 @@ dependencies = [
     "numpy>=2.2.6",
     "onnxruntime==1.16.3",
     "openai>=2.30.0",
+    "opencv-python>=4.13.0.92",
     "pillow>=12.2.0",
     "pyaudio>=0.2.14",
     "pygame>=2.6.1",
@@ -21,5 +23,6 @@ dependencies = [
     "requests>=2.33.1",
     "sounddevice>=0.5.5",
     "speechrecognition>=3.16.0",
+    "tf-keras>=2.21.0",
     "yt-dlp>=2026.3.17",
 ]

@@ -1,3 +1,4 @@
+from auth.face_auth import register_face
 from helpers.config import load_config
 from ui import home, setup
 import customtkinter as ctk
@@ -6,6 +7,7 @@ from helpers.agent import Agent
 from helpers.speak import speak_async
 import threading
 import time
+from ui.face_auth_ui import FaceAuthUI
 
 CONFIG_FILE = "config.json"
 
@@ -63,27 +65,39 @@ def start_listening(config):
             except Exception as e:
                 print("❌ Error:", e)
                 continue
-# main
+
+#main
 if __name__ == "__main__":
-    app = ctk.CTk()
-    app.title("Kaizen")
-    app.after(0, lambda: app.state('zoomed'))
 
     config = load_config(CONFIG_FILE)
 
-    if config["wake_name"] and config.get("user_name"):
+    app = ctk.CTk()
+    app.configure(fg_color="black")
+    app.title("Kaizen")
+    app.after(0, lambda: app.state('zoomed'))
+
+    def start_main_app():
+        for widget in app.winfo_children():
+            widget.destroy()
+
         home.open_home(app, ctk, config, config["wake_name"])
 
-        # listing thread
         listener_thread = threading.Thread(
             target=start_listening,
             args=(config,),
             daemon=True
         )
-
         listener_thread.start()
+
+    if config["wake_name"] and config.get("user_name"):
+        
+        face_ui = FaceAuthUI(app, on_success=start_main_app)
+        face_ui.pack(fill="both", expand=True)
 
     else:
         setup.setup_ui(app, ctk, config, start_listening)
+
+        # register face after setup (better move to button later)
+        register_face()
 
     app.mainloop()

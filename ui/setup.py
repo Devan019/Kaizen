@@ -105,7 +105,7 @@ def setup_ui(app, ctk, config, start_listening=None):
         "Segoe UI Semibold", 14)).pack(anchor="w", padx=34)
     wake_entry = ctk.CTkEntry(
         form, width=420, placeholder_text="Say my name to wake me up")
-    wake_entry.insert(0, config.get("wake_name", ""))
+    wake_entry.insert(0, str(config.get("wake_name") or ""))
     wake_entry.pack(padx=34, pady=(8, 18))
 
     ctk.CTkLabel(form, text="Audio voice", font=(
